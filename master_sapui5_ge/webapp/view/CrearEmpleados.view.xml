@@ -1,0 +1,95 @@
+<mvc:View controllerName="emaldi.com.mastersapui5ge.controller.CrearEmpleados" xmlns:form="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:c="sap.ui.core" displayBlock="true" height="100%" busyIndicatorDelay="0">
+    <NavContainer id="wizardNavContainer" afterNavigate="onAfterNavigate">
+        <Page title="{i18n>titleCrearEmpleado}" titleAlignment="Center" showFooter="true">
+            <content>
+                <Wizard id="wizardEmpleados" class="sapUiResponsivePadding--header sapUiResponsivePadding--content" complete="wizardCompleted">
+                    <WizardStep id="TipoEmpleadoStep" validated="false" title="Tipo de Empleado" activate="additionalInfoValidation">
+                        <MessageStrip class="sapUiSmallMarginBottom" text="Seleccione el tipo de empleado para rellenar sus datos" showIcon="true" />
+
+                        <HBox alignItems="Center" justifyContent="Center" width="100%">
+                            <SegmentedButton width="420px" id="typeEmployeeId" selectionChange="onSelectionChange">
+                                <items>
+                                    <SegmentedButtonItem icon="sap-icon://employee" text="Interno" class="sapUiSmallMarginEnd" press="onChangeTab2" />
+                                    <SegmentedButtonItem icon="sap-icon://employee" text="Autonomo" class="sapUiSmallMarginBottom" press="onChangeTab2" />
+                                    <SegmentedButtonItem icon="sap-icon://employee" text="Gerente" class="sapUiSmallMarginEnd" press="onChangeTab2" />
+                                </items>
+                            </SegmentedButton>
+                        </HBox>
+                    </WizardStep>
+                    <WizardStep id="DatosEmpleadoStep" validated="false" title="Datos de empleado" activate="additionalInfoValidation">
+                        <MessageStrip class="sapUiSmallMarginBottom" text="Complete los datos obligatorios para poder continuar" showIcon="true" />
+                        <VBox>
+                            <form:SimpleForm editable="true">
+                                <Label text="Nombre" labelFor="iNombre" />
+                                <Input id="iNombre" required="true" valueState="{modelCreate>/_FirstNameState}" value="{/FirstName}" />
+
+                                <Label text="Apellidos" labelFor="iApellido" />
+                                <Input id="iApellido" required="true" valueState="{modelCreate>/_ApellidoState}" value="{/LastName}" />
+
+                                <Label text="DNI" labelFor="iDNI" visible="{=  ${modelCreate>/Type} === 'Autonomo' ? false : true}" />
+                                <Input id="iDNI" required="true" valueState="{modelCreate>/_DniState}" value="{/Dni}" change="ValidacionDNI" visible="{=  ${modelCreate>/Type} === 'Autonomo' ? false : true}" width="100%" />
+
+                                <Label text="CIF" labelFor="iCIF" visible="{=  ${modelCreate>/Type} === 'Autonomo' ? true : false}" />
+                                <Input id="iCIF" required="true" visible="{=  ${modelCreate>/Type} === 'Autonomo' ? true : false}" width="100%" value="{/Dni}" />
+
+                                <Label text="Saldo bruto anual" visible="{=  ${modelCreate>/Type} === 'Autonomo' ? false : true}" />
+                                <Slider value="{/_Salary}" min="12000" max="80000" step="1000" inputsAsTooltips="true" showAdvancedTooltip="true" enableTickmarks="true" width="100%" progress="false" class="sapUiSmallMarginBottom" visible="{=  ${modelCreate>/Type} === 'Interno'}">
+                                    <ResponsiveScale tickmarksBetweenLabels="100" />
+                                </Slider>
+                                <Slider value="{/_Salary}" min="50000" max="200000" step="1000" inputsAsTooltips="true" showAdvancedTooltip="true" enableTickmarks="true" width="100%" progress="false" class="sapUiSmallMarginBottom" visible="{=  ${modelCreate>/Type} === 'Gerente'}">
+                                    <ResponsiveScale tickmarksBetweenLabels="100" />
+                                </Slider>
+                                <Label text="Precio Diario" visible="{=  ${modelCreate>/Type} === 'Autonomo' ? true : false}" />
+                                <Slider value="{/_Salary}" min="100" max="2000" step="100" inputsAsTooltips="true" showAdvancedTooltip="true" enableTickmarks="true" width="100%" progress="false" class="sapUiSmallMarginBottom" visible="{=  ${modelCreate>/Type} === 'Autonomo'}">
+                                    <ResponsiveScale tickmarksBetweenLabels="100" />
+                                </Slider>
+                                <Label text="{i18n>fechaIncorporacion}" required="true" />
+                                <DatePicker dateValue="{modelCreate>/CreationDate}" valueState="{modelCreate>/_CreationDateState}" />
+                            </form:SimpleForm>
+                        </VBox>
+                        <HBox>
+                            <Button text="Paso 3" press="onStep3" id="btnStepTo3" />
+                        </HBox>
+                    </WizardStep>
+                    <WizardStep id="InfoAdicionalStep" validated="false" title="Informacion adicional" activate="additionalInfoValidation">
+                        <MessageStrip class="sapUiSmallMarginBottom" text="{i18n>textInfoAditional}" showIcon="true" />
+                        <Label text="{i18n>comment}" width="100%" />
+                        <TextArea value="{/Comments}" width="100%" />
+                        <UploadCollection
+                            id="UploadCollection"
+                            maximumFilenameLength="55"
+                            maximumFileSize="8"
+                            multiple="true"
+                            uploadUrl="/sap/opu/odata/sap/ZEMPLOYEES_SRV/Attachments"
+                            sameFilenameAllowed="true"
+                            instantUpload="false"
+                            change="onChangeUploadCollection"
+                            beforeUploadStarts="onFileBeforeUpload"
+                            noDataDescription="{i18n>Arrastrararchivo}"
+                        />
+
+                        <HBox>
+                            <Button text="Verificar" press="onVerificar" id="btn" />
+                        </HBox>
+                    </WizardStep>
+                </Wizard>
+            </content>
+            <footer>
+                <OverflowToolbar>
+                    <ToolbarSpacer />
+                    <Button text="{i18n>cancel}" press="onCancel" />
+                </OverflowToolbar>
+            </footer>
+        </Page>
+        <Page id="ResumenPage" title="{i18n>F}">
+            <c:Fragment fragmentName="emaldi.com.mastersapui5ge.view.fragments.ResumeEmpleado" type="XML" />
+            <footer>
+                <Toolbar>
+                    <ToolbarSpacer />
+                    <Button text="{i18n>guardar}" press="onSave" />
+                    <Button text="{i18n>cancelar}" press="onCancel" />
+                </Toolbar>
+            </footer>
+        </Page>
+    </NavContainer>
+</mvc:View>

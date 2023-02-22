@@ -1,0 +1,19 @@
+<mvc:View controllerName="emaldi.com.mastersapui5ge.controller.Main" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m">
+    <Page id="page" title="{i18n>title}" titleAlignment="Center">
+        <content>
+            <Panel headerText="{i18n>headerEmpleado}" expanded="true" expandable="true">
+                <GenericTile headerImage="sap-icon://add-employee" press="onCrearEmpleados">
+                    <TileContent footer="Crear empleados" />
+                </GenericTile>
+                <GenericTile headerImage="sap-icon://employee-lookup" press="onMostrarEmpleados">
+                    <TileContent footer="Ver empleados" />
+                </GenericTile>
+            </Panel>
+            <Panel headerText="{i18n>headerPedido}" expanded="true" expandable="true">
+                <GenericTile headerImage="sap-icon://signature">
+                    <TileContent footer="Firmar pedido" />
+                </GenericTile>
+            </Panel>
+        </content>
+    </Page>
+</mvc:View>
