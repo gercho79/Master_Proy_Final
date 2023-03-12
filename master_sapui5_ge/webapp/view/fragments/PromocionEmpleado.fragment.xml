@@ -1,0 +1,40 @@
+<c:FragmentDefinition xmlns="sap.m" xmlns:c="sap.ui.core" xmlns:f="sap.ui.layout.form">
+    <Dialog title="Nuevo Ascenso">
+        <content>
+            <f:Form>
+                <f:layout>
+                    <f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false" />
+                </f:layout>
+                <f:formContainers>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement label="Salario Actual">
+                                <Label text="{empModelSrv>/UserToSalary/Amount}" />
+                            </f:FormElement>
+
+                            <f:FormElement label="{i18n>salary}">
+                                <f:fields>
+                                    <Input value="{promotionEmp>/Ammount}" id="name" />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="{i18n>fecha}">
+                                <f:fields>
+                                    <DatePicker dateValue="{promotionEmp>/CreationDate}" />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="{i18n>comments}">
+                                <f:fields>
+                                    <TextArea value="{promotionEmp>/Comments}" />
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                </f:formContainers>
+            </f:Form>
+        </content>
+        <buttons>
+            <Button text="{i18n>accept}" press="addPromotion" />
+            <Button text="{i18n>cancel}" press="onClosePromotionDialog" />
+        </buttons>
+    </Dialog>
+</c:FragmentDefinition>
